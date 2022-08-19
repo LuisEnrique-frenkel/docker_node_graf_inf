@@ -35,7 +35,6 @@ services:
       - grafana_data:/var/lib/grafana
       - grafana_data_plugins:/var/lib/grafana/plugins
       - grafana_data_logs:/var/log/grafana
-      - grafana_data_config:/etc/grafana/grafana.ini
   
   nodered:
     image: nodered/node-red:latest
@@ -52,7 +51,6 @@ volumes:
   grafana_data:
   grafana_data_plugins:
   grafana_data_logs:
-  grafana_data_config:
   influxdb_data:
   influxdb_data_conf:
   node-red_data: 
