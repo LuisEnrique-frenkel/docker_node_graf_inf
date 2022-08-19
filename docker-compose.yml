@@ -49,7 +49,10 @@ services:
       - node-red_data:/data
 
 volumes:
-  grafana_data: 
+  grafana_data:
+  grafana_data_plugins:
+  grafana_data_logs:
+  grafana_data_config:
   influxdb_data:
   influxdb_data_conf:
   node-red_data: 
