@@ -1,0 +1,232 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "7bfeffc019220cbe",
+        "type": "subflow",
+        "name": "Delete Measurement Influxdb",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 200,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "a5c6d923a473528c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 680,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "490f6bb9332a37cf",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "ip",
+                "type": "str",
+                "value": "127.0.0.1",
+                "ui": {
+                    "icon": "font-awesome/fa-database",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Org",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-address-book",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Bucket",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-cube",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Measurement",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-feed",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Token",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-key",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Start",
+                "type": "str",
+                "value": "2020-03-01T00:00:00Z",
+                "ui": {
+                    "icon": "font-awesome/fa-calendar-plus-o",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Stop",
+                "type": "str",
+                "value": "2023-11-14T00:00:00Z",
+                "ui": {
+                    "icon": "font-awesome/fa-calendar-minus-o",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#D8BFD8",
+        "icon": "node-red-contrib-influxdb/influxdb.png"
+    },
+    {
+        "id": "a5c6d923a473528c",
+        "type": "function",
+        "z": "7bfeffc019220cbe",
+        "name": "Delete Measurement",
+        "func": "var ip = (typeof env.get(\"ip\") == \"string\") ? env.get(\"ip\") :  \"127.0.0.1\";\nvar Org = (typeof env.get(\"Org\") == \"string\") ? env.get(\"Org\") : \"my-org\";\nvar Bucket = (typeof env.get(\"Bucket\") == \"string\") ? env.get(\"Bucket\") : \"my-bucket\";\nvar Measurement = (typeof env.get(\"Measurement\") == \"string\") ? env.get(\"Measurement\") : \"my-Measurement\";\nvar Token = (typeof env.get(\"Token\") == \"string\") ? env.get(\"Token\") : \"my-Token\";\nvar Start = (typeof env.get(\"Start\") == \"string\") ? env.get(\"Start\") : \"my-Start\";\nvar Stop = (typeof env.get(\"Stop\") == \"string\") ? env.get(\"Stop\") : \"my-Stop\";\n\nmsg ={\n    method: 'POST',\n    url: 'http://'+ip+':8086/api/v2/delete?org='+Org+'&bucket='+Bucket,\n    headers : {\n        //\"Authorization\": \"Token ijiA6S4XaQInH1JXp5U7DsqBJ707OgaYgnGkg6opTQjhMwM70D7F5B93v_Q3z_CKKEF25JK1cHvoimBGNCLSjA==\",\n        \"Authorization\": \"Token \" + Token,\n        \"Content-Type\": \"application/json\"\n    },\n    payload: {\n            \"start\": Start,\n            \"stop\": Stop,\n            \"predicate\": \"_measurement=\\\"\"+ Measurement + \"\\\"\"\n        }\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 160,
+        "wires": [
+            [
+                "490f6bb9332a37cf"
+            ]
+        ]
+    },
+    {
+        "id": "490f6bb9332a37cf",
+        "type": "http request",
+        "z": "7bfeffc019220cbe",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 550,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3cc11d24.ff01a2",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "WARNING: please check you have started this container with a volume that is mounted to /data\\n otherwise any flow changes are lost when you redeploy or upgrade the container\\n (e.g. upgrade to a more recent node-red docker image).\\n  If you are using named volumes you can ignore this warning.\\n Double click or see info side panel to learn how to start Node-RED in Docker to save your work",
+        "info": "\nTo start docker with a bind mount volume (-v option), for example:\n\n```\ndocker run -it -p 1880:1880 -v /home/user/node_red_data:/data --name mynodered nodered/node-red\n```\n\nwhere `/home/user/node_red_data` is a directory on your host machine where you want to store your flows.\n\nIf you do not do this then you can experiment and redploy flows, but if you restart or upgrade the container the flows will be disconnected and lost. \n\nThey will still exist in a hidden data volume, which can be recovered using standard docker techniques, but that is much more complex than just starting with a named volume as described above.",
+        "x": 350,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "c680ede4f43109f1",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Hellow world",
+        "payloadType": "str",
+        "x": 170,
+        "y": 180,
+        "wires": [
+            [
+                "ded40e2e9bf36f8d"
+            ]
+        ]
+    },
+    {
+        "id": "ded40e2e9bf36f8d",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 180,
+        "wires": []
+    }
+]
